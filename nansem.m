@@ -17,10 +17,10 @@ if nargin < 2
 end
 
 ignored_values = isnan(A);
+n = sum(~ignored_values, dim);
+% A = A(~ignored_values);
 
-A = A(~ignored_values);
-
-stdev = std(A, [], dim);
-standard_error = stdev / sqrt(size(A, dim));
+stdev = nanstd(A, [], dim);
+standard_error = stdev ./ sqrt(n);
 
 end
