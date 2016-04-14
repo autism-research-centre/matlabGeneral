@@ -7,9 +7,17 @@ function scripts = savescripts
 % Make sure to actually save the output variable with data!
 % output is a structure with fields "name" and "content"
 
-all_files = ls('*.m');
-num_files = size(all_files, 1);
-for i = 1:num_files
-    scripts(i).name = all_files(i, :);
-    scripts(i).content = fileread(all_files(i, :));
+all_dirs = strsplit(genpath(pwd), ';');
+all_dirs(end) = []; % infuriating
+i = 0;
+for curr_dir = all_dirs
+    curr_dir = curr_dir{1}; % fuck off matlab
+    sub_files = dir(fullfile(curr_dir, '*.m'));
+    if numel(sub_files)>0
+        for ii = 1:numel(sub_files);
+            i = i+1;
+            scripts(i).name = fullfile(curr_dir, sub_files(ii).name);
+            scripts(i).content = fileread(scripts(i).name);
+        end
+    end
 end
